@@ -1,5 +1,6 @@
 package com.aethink
 
+import io.ktor.client.request.request
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -64,6 +65,42 @@ fun Application.configureRouting() {
         }
 
         post("/auth/login") {
+            val requestBody = call.receive<LoginRequest>()
+
+            val email = requestBody.email
+            val password = requestBody.password
+
+            if (email.isBlank()) {
+                call.respond(
+                    HttpStatusCode.BadRequest,
+                    "email should not be blank"
+                )
+                return@post
+            }
+
+            val existingUser = UserRepositoryInMemory.findUserByEmail(email)
+            if (existingUser == null) {
+                call.respond(
+                    HttpStatusCode.NotFound,
+                    "User does not exist"
+                )
+                return@post
+            }
+
+            if (BCryptPasswordHasher.hash(password) != existingUser.passwordHash) {
+                // Wrong password
+                call.respond(
+                    HttpStatusCode.Unauthorized,
+                    "Wrong password"
+                )
+            }
+
+            /**
+             * If yesss
+             */
+
+
+
             call.respond(
                 HttpStatusCode.OK,
                 "Login"
