@@ -87,7 +87,7 @@ fun Application.configureRouting() {
                 return@post
             }
 
-            if (BCryptPasswordHasher.hash(password) != existingUser.passwordHash) {
+            if (!BCryptPasswordHasher.verify(password, existingUser.passwordHash)) {
                 // Wrong password
                 call.respond(
                     HttpStatusCode.Unauthorized,
