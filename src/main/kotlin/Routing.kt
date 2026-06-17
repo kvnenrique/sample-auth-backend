@@ -1,21 +1,25 @@
 package com.aethink
 
 import io.ktor.server.application.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.resources.*
-import io.ktor.server.resources.*
-import io.ktor.server.resources.Resources
-import kotlinx.serialization.Serializable
 
 fun Application.configureRouting() {
     routing {
         get("/") {
             call.respondText("Hello, World!")
         }
-        get<Articles> { article ->
+
+        get("/articles") {
             // Get all articles ...
-            call.respond("List of articles sorted starting from ${article.sort}")
+            val sort = call.request.queryParameters["sort"] ?: "new"
+            call.respond("List of articles sorted starting from $sort")
+        }
+
+        get("/articles/{articleId}") {
+            val articleId = call.parameters["articleId"]
+            call.respond("Article details for $articleId")
         }
     }
 }

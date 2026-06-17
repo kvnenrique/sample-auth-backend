@@ -6,5 +6,4 @@ ktor:
       - com.aethink.SerializationKt.configureSerialization
       - com.aethink.SecurityKt.configureSecurity
       - com.aethink.StatusPagesKt.configureStatusPages
-      - com.aethink.ResourcesKt.configureResources
       - com.aethink.RoutingKt.configureRouting

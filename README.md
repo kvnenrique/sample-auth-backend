@@ -1,4 +1,4 @@
-# sampleauthbackend
+# Sample Authentication Backend
 
 This project was created using the [Ktor Project Generator](https://start.ktor.io).
 
@@ -17,7 +17,6 @@ Here's a list of features included in this project:
 | [Authentication](https://start.ktor.io/p/io.ktor/server-auth) | Provides extension point for handling the Authorization header |
 | [Authentication JWT](https://start.ktor.io/p/io.ktor/server-auth-jwt) | Handles JSON Web Token (JWT) bearer authentication scheme |
 | [Content Negotiation](https://start.ktor.io/p/io.ktor/server-content-negotiation) | Provides automatic content conversion according to Content-Type and Accept headers |
-| [Resources](https://start.ktor.io/p/io.ktor/server-resources) | Provides type-safe routing |
 
 
 ## Building & Running
