@@ -1,5 +1,6 @@
 package com.aethink
 
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -8,18 +9,29 @@ import io.ktor.server.routing.*
 fun Application.configureRouting() {
     routing {
         get("/") {
-            call.respondText("Hello, World!")
+            call.respondText("ÆThink - Sample Authentication Backend")
         }
 
-        get("/articles") {
-            // Get all articles ...
-            val sort = call.request.queryParameters["sort"] ?: "new"
-            call.respond("List of articles sorted starting from $sort")
+        post("/auth/register") {
+            // register user
+            call.respond(
+                HttpStatusCode.OK,
+                "Register"
+            )
         }
 
-        get("/articles/{articleId}") {
-            val articleId = call.parameters["articleId"]
-            call.respond("Article details for $articleId")
+        post("/auth/login") {
+            call.respond(
+                HttpStatusCode.OK,
+                "Login"
+            )
+        }
+
+        get("/me") {
+            call.respond(
+                HttpStatusCode.OK,
+                "Me"
+            )
         }
     }
 }
