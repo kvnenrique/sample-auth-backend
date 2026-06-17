@@ -1,6 +1,6 @@
 package com.aethink
 
-class UserRepositoryInMemory: UserRepositoryI {
+object UserRepositoryInMemory: UserRepositoryI {
     val userTable = mutableMapOf<String, User>()
 
     override fun findUserByEmail(email: String): User? {
