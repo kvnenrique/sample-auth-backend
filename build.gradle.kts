@@ -24,6 +24,7 @@ dependencies {
     implementation(ktorLibs.server.netty)
     implementation(ktorLibs.server.statusPages)
     implementation(libs.logback.classic)
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.5.0")
 
     testImplementation(kotlin("test"))
     testImplementation(ktorLibs.server.testHost)
