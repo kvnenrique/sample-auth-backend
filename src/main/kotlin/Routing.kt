@@ -1,7 +1,5 @@
 package com.aethink
 
-import io.ktor.client.request.request
-import io.ktor.client.utils.HttpRequestIsReadyForSending
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -44,7 +42,7 @@ fun Application.configureRouting() {
                 return@post
             }
 
-            val passwordHash = "SamplePasswordHash"
+            val passwordHash = BCryptPasswordHasher.hash(password)
             val newUser = User(
                 requestBody.name,
                 requestBody.email,

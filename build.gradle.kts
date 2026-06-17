@@ -25,6 +25,7 @@ dependencies {
     implementation(ktorLibs.server.statusPages)
     implementation(libs.logback.classic)
     implementation("io.ktor:ktor-serialization-kotlinx-json:3.5.0")
+    implementation("org.mindrot:jbcrypt:0.4")
 
     testImplementation(kotlin("test"))
     testImplementation(ktorLibs.server.testHost)
