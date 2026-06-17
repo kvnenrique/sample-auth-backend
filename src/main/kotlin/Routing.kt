@@ -1,11 +1,14 @@
 package com.aethink
 
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.client.request.request
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import java.util.Date
 
 fun Application.configureRouting() {
     routing {
@@ -96,14 +99,27 @@ fun Application.configureRouting() {
             }
 
             /**
-             * If yesss
+             * If login success
              */
+            val jwtSecret = "some-long-secret"
 
+            val accessToken = JWT.create()
+                .withAudience("sample authentication backend clients")
+                .withIssuer("sample authentication backend")
+                .withClaim("email", existingUser.email)
+                .withExpiresAt(Date(System.currentTimeMillis() + 60 * 60 * 1000))
+                .sign(Algorithm.HMAC256(jwtSecret))
+
+            val response = LoginResponse(
+                accessToken,
+                "Bearer",
+                3600
+            )
 
 
             call.respond(
                 HttpStatusCode.OK,
-                "Login"
+                response
             )
         }
 
