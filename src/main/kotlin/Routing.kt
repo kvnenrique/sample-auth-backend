@@ -1,5 +1,6 @@
 package com.aethink
 
+import com.aethink.extensions.seconds
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.client.request.request
@@ -111,18 +112,19 @@ fun Application.configureRouting() {
              * If login success
              */
             val jwtSecret = "some-long-secret" // Don't hardcode the secret on real projects, put them on .env
+            val expiresIn = 3_600 // seconds
 
             val accessToken = JWT.create()
                 .withAudience("sample authentication backend clients")
                 .withIssuer("sample authentication backend")
                 .withClaim("email", existingUser.email)
-                .withExpiresAt(Date(System.currentTimeMillis() + 60 * 60 * 1000))
+                .withExpiresAt(Date(System.currentTimeMillis() + expiresIn.seconds))
                 .sign(Algorithm.HMAC256(jwtSecret))
 
             val response = LoginResponse(
                 accessToken,
                 "Bearer",
-                3600
+                expiresIn
             )
 
 
