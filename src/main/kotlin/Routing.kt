@@ -101,7 +101,7 @@ fun Application.configureRouting() {
             /**
              * If login success
              */
-            val jwtSecret = "some-long-secret"
+            val jwtSecret = "some-long-secret" // Don't hardcode the secret on real projects, put them on .env
 
             val accessToken = JWT.create()
                 .withAudience("sample authentication backend clients")
