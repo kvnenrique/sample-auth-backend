@@ -12,10 +12,16 @@ import java.util.Date
 
 fun Application.configureRouting() {
     routing {
+        /*
+         * Home
+         * */
         get("/") {
             call.respondText("ÆThink - Sample Authentication Backend")
         }
 
+        /*
+         * POST /auth/register
+         * */
         post("/auth/register") {
             val requestBody = call.receive<RegisterUserRequest>()
 
@@ -67,6 +73,9 @@ fun Application.configureRouting() {
             )
         }
 
+        /*
+         * POST /auth/login
+         * */
         post("/auth/login") {
             val requestBody = call.receive<LoginRequest>()
 
@@ -123,6 +132,9 @@ fun Application.configureRouting() {
             )
         }
 
+        /*
+         * GET /me
+         * */
         get("/me") {
             call.respond(
                 HttpStatusCode.OK,
