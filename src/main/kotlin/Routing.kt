@@ -3,8 +3,9 @@ package com.aethink
 import com.aethink.extensions.seconds
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import io.ktor.client.request.request
 import io.ktor.http.HttpStatusCode
+import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -112,15 +113,14 @@ fun Application.configureRouting() {
             /**
              * If login success
              */
-            val jwtSecret = "some-long-secret" // Don't hardcode the secret on real projects, put them on .env
-            val expiresIn = 3_600 // seconds
+            val expiresIn = JwtConfig.accessTokenExpiresIn // seconds
 
             val accessToken = JWT.create()
-                .withAudience("sample authentication backend clients")
-                .withIssuer("sample authentication backend")
-                .withClaim("email", existingUser.email)
+                .withAudience(JwtConfig.audience)
+                .withIssuer(JwtConfig.issuer)
+                .withClaim(JwtConfig.emailClaim, existingUser.email)
                 .withExpiresAt(Date(System.currentTimeMillis() + expiresIn.seconds))
-                .sign(Algorithm.HMAC256(jwtSecret))
+                .sign(Algorithm.HMAC256(JwtConfig.secret))
 
             val response = LoginResponse(
                 accessToken,
@@ -138,11 +138,38 @@ fun Application.configureRouting() {
         /*
          * GET /me
          * */
-        get("/me") {
-            call.respond(
-                HttpStatusCode.OK,
-                "Me"
-            )
+        authenticate("auth-jwt") {
+            get("/me") {
+                val principal = call.principal<JWTPrincipal>()
+                val email = principal?.payload?.getClaim(JwtConfig.emailClaim)?.asString()
+
+                if (email.isNullOrBlank()) {
+                    call.respond(
+                        HttpStatusCode.Unauthorized,
+                        "Invalid token"
+                    )
+                    return@get
+                }
+
+                val user = UserRepositoryInMemory.findUserByEmail(email)
+                if (user == null) {
+                    call.respond(
+                        HttpStatusCode.Unauthorized,
+                        "Invalid token"
+                    )
+                    return@get
+                }
+
+                val response = UserResponse(
+                    user.name,
+                    user.email
+                )
+
+                call.respond(
+                    HttpStatusCode.OK,
+                    response
+                )
+            }
         }
     }
 }
