@@ -86,7 +86,7 @@ fun Application.configureRouting() {
             if (email.isBlank()) {
                 call.respond(
                     HttpStatusCode.BadRequest,
-                    "email should not be blank"
+                    "email can not be blank"
                 )
                 return@post
             }
@@ -94,8 +94,8 @@ fun Application.configureRouting() {
             val existingUser = UserRepositoryInMemory.findUserByEmail(email)
             if (existingUser == null) {
                 call.respond(
-                    HttpStatusCode.NotFound,
-                    "User does not exist"
+                    HttpStatusCode.Unauthorized,
+                    "Bad credentials"
                 )
                 return@post
             }
@@ -104,8 +104,9 @@ fun Application.configureRouting() {
                 // Wrong password
                 call.respond(
                     HttpStatusCode.Unauthorized,
-                    "Wrong password"
+                    "Bad credentials"
                 )
+                return@post
             }
 
             /**
