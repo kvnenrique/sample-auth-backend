@@ -1,4 +1,4 @@
-package com.aethink
+package com.aethink.domain
 
 data class User(
     val name: String,

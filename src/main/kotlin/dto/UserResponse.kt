@@ -1,4 +1,4 @@
-package com.aethink
+package com.aethink.dto
 
 import kotlinx.serialization.Serializable
 

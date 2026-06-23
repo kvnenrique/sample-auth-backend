@@ -1,4 +1,6 @@
-package com.aethink
+package com.aethink.data
+
+import com.aethink.domain.User
 
 object UserRepositoryInMemory: UserRepositoryI {
     val userTable = mutableMapOf<String, User>()

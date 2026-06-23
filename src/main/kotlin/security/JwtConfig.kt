@@ -1,4 +1,4 @@
-package com.aethink
+package com.aethink.security
 
 object JwtConfig {
     const val secret = "some-long-secret"

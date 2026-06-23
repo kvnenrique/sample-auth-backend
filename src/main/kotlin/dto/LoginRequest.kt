@@ -1,10 +1,9 @@
-package com.aethink
+package com.aethink.dto
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RegisterUserRequest(
-    val name: String,
+data class LoginRequest(
     val email: String,
     val password: String
 )

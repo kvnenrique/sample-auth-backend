@@ -1,5 +1,6 @@
 package com.aethink
 
+import com.aethink.security.JwtConfig
 import io.ktor.server.application.*
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm

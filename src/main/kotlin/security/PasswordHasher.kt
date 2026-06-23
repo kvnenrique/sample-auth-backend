@@ -1,4 +1,4 @@
-package com.aethink
+package com.aethink.security
 
 import org.mindrot.jbcrypt.BCrypt
 
