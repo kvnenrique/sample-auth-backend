@@ -2,12 +2,12 @@ package com.aethink.domain
 
 import kotlin.time.Instant
 
-class RefreshToken(
+data class RefreshToken(
     val id: String,
     val user_id: String,
     val token_hash: String,
     val expires_at: Instant,
-    val revoked_at: Instant,
+    val revoked_at: Instant? = null,
     val created_at: Instant,
-    val replaced_by_token_id: String
+    val replaced_by_token_id: String? = null
 )
