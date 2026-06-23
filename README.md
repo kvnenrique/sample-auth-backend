@@ -1,6 +1,9 @@
 # Sample Authentication Backend
+Version: 1.0.0
 
-This project was created using the [Ktor Project Generator](https://start.ktor.io).
+Basic backend to undertand authentication fundamentals.
+
+Project created using the [Ktor Project Generator](https://start.ktor.io).
 
 Here are some useful links to get you started:
  * [Ktor Documentation](https://ktor.io/docs/welcome.html)
@@ -8,7 +11,17 @@ Here are some useful links to get you started:
  * [Ktor Slack chat](https://app.slack.com/client/T09229ZC6/C0A974TJ9). [Request an invite](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up).
 
 
-## Features
+## Routes
+| Endpoint            | Descripotion |
+|---------------------|--------------|
+| GET /               | Home         |
+| POST /auth/register | Register a new user |
+| POST /auth/login    | Login with registered credentials |
+| GET /me | Fetch information using authentication token |
+
+
+
+## Plugins
 Here's a list of features included in this project:
 
 | Name | Description |
