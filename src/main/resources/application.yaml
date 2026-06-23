@@ -3,7 +3,7 @@ ktor:
     port: 8080
   application:
     modules:
-      - com.aethink.SerializationKt.configureSerialization
-      - com.aethink.SecurityKt.configureSecurity
-      - com.aethink.StatusPagesKt.configureStatusPages
-      - com.aethink.RoutingKt.configureRouting
+      - com.aethink.plugin.SerializationKt.configureSerialization
+      - com.aethink.plugin.SecurityKt.configureSecurity
+      - com.aethink.plugin.StatusPagesKt.configureStatusPages
+      - com.aethink.plugin.RoutingKt.configureRouting

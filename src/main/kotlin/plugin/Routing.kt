@@ -1,4 +1,4 @@
-package com.aethink
+package com.aethink.plugin
 
 import com.aethink.routes.authRoutes
 import com.aethink.routes.meRoutes

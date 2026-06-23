@@ -1,4 +1,4 @@
-package com.aethink
+package com.aethink.plugin
 
 import com.aethink.security.JwtConfig
 import io.ktor.server.application.*

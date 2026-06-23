@@ -1,4 +1,4 @@
-package com.aethink
+package com.aethink.plugin
 
 import io.ktor.http.*
 import io.ktor.server.application.*

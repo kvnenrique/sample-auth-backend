@@ -1,4 +1,4 @@
-package com.aethink
+package com.aethink.plugin
 
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
