@@ -21,7 +21,7 @@ fun Application.configureRouting() {
         authRoutes()
 
         /*
-         * /me
+         * /me route
          * */
         meRoutes()
     }
