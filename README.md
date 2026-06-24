@@ -1,5 +1,5 @@
 # Sample Authentication Backend
-Version: 1.0.0
+Version: 2.0.0
 
 Basic backend to undertand authentication fundamentals.
 
@@ -17,7 +17,9 @@ Here are some useful links to get you started:
 | GET /               | Home         |
 | POST /auth/register | Register a new user |
 | POST /auth/login    | Login with registered credentials |
-| GET /me | Fetch information using authentication token |
+| POST /auth/logout   | Revokes active refresh token | 
+| POST /auth/refresh  | Refreshes given refresh token| 
+| GET /me             | Fetch information using authentication token |
 
 
 
