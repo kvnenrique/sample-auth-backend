@@ -1,4 +1,4 @@
 package com.aethink.extensions
 
-val Int.seconds: Int
+val Long.seconds: Long
     get() = this * 1000

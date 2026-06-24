@@ -6,5 +6,5 @@ object JwtConfig {
     const val audience = "sample authentication backend clients"
     const val realm = "sample authentication backend"
     const val emailClaim = "email"
-    const val accessTokenExpiresIn = 3_600
+    const val accessTokenExpiresIn = 3_600L
 }
