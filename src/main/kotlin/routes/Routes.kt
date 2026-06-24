@@ -7,6 +7,7 @@ import com.aethink.domain.RefreshToken
 import com.aethink.domain.User
 import com.aethink.dto.LoginRequest
 import com.aethink.dto.LoginResponse
+import com.aethink.dto.LogoutRequest
 import com.aethink.dto.RefreshTokenRequest
 import com.aethink.dto.RegisterRequest
 import com.aethink.dto.UserResponse
@@ -255,7 +256,7 @@ fun Route.authRoutes() {
          * POST /auth/logout
          * */
         post("/logout") {
-            val requestBody = call.receive<RefreshTokenRequest>()
+            val requestBody = call.receive<LogoutRequest>()
             val rawRefreshToken = requestBody.refreshToken
 
             if (rawRefreshToken.isBlank()) {
