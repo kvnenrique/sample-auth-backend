@@ -1,5 +1,6 @@
 package com.aethink.routes
 
+import com.aethink.data.RefreshTokenRepositoryI
 import com.aethink.data.RefreshTokenRepositoryInMemory
 import com.aethink.data.UserRepositoryInMemory
 import com.aethink.domain.RefreshToken
@@ -248,6 +249,35 @@ fun Route.authRoutes() {
                 HttpStatusCode.OK,
                 loginResponse
             )
+        }
+
+        /*
+         * POST /auth/logout
+         * */
+        post("/logout") {
+            val requestBody = call.receive<RefreshTokenRequest>()
+            val rawRefreshToken = requestBody.refreshToken
+
+            if (rawRefreshToken.isBlank()) {
+                call.respond(
+                    HttpStatusCode.BadRequest,
+                    "Refresh token can not be blank"
+                )
+                return@post
+            }
+
+            val refreshTokenHash = TokenService.hashRefreshToken(rawRefreshToken)
+
+            val existingRefreshToken = RefreshTokenRepositoryInMemory
+                .findRefreshTokenByTokenHash(refreshTokenHash)
+
+            if (existingRefreshToken != null) {
+                RefreshTokenRepositoryInMemory.revokeRefreshTokenById(
+                    existingRefreshToken.id
+                )
+            }
+
+            call.respond(HttpStatusCode.NoContent)
         }
     }
 }
