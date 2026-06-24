@@ -122,14 +122,15 @@ fun Route.authRoutes() {
             val accessToken = TokenService.createAccessToken(email)
             val expiresIn = JwtConfig.accessTokenExpiresIn // seconds
             // Refresh token
+            val createdAt = Clock.System.now()
             val rawRefreshToken = TokenService.generateRefreshToken()
             val refreshTokenHash = TokenService.hashRefreshToken(rawRefreshToken)
             val refreshToken = RefreshToken(
                 UUID.randomUUID().toString(),
                 existingUser.email,
                 refreshTokenHash,
-                Clock.System.now(),
-                TokenService.getRefreshTokenExpirationInstant(),
+                createdAt,
+                TokenService.getRefreshTokenExpirationInstant(createdAt),
                 null,
                 null
             )

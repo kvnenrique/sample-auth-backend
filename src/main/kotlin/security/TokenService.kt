@@ -41,7 +41,7 @@ object TokenService {
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
 
-    fun getRefreshTokenExpirationInstant(): Instant {
-        return Clock.System.now().plus(30.days)
+    fun getRefreshTokenExpirationInstant(createdAt: Instant): Instant {
+        return createdAt.plus(30.days)
     }
 }
