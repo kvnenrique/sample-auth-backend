@@ -120,7 +120,8 @@ fun Route.authRoutes() {
             val loginResponse = LoginResponse(
                 accessToken,
                 "Bearer",
-                expiresIn
+                expiresIn,
+                "TODO"
             )
 
             call.respond(
