@@ -42,6 +42,6 @@ object TokenService {
     }
 
     fun getRefreshTokenExpirationInstant(createdAt: Instant): Instant {
-        return createdAt.plus(30.days)
+        return createdAt.plus(RefreshTokenConfig.lifeTimeDurationInDays.days)
     }
 }
