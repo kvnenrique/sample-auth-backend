@@ -1,5 +1,6 @@
 package com.aethink.security
 
+import com.aethink.extensions.seconds
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import java.security.MessageDigest
@@ -14,7 +15,7 @@ object TokenService {
     private val secureRandom = SecureRandom()
 
     fun createAccessToken(email: String): String {
-        val expiresInMillis: Long = JwtConfig.accessTokenExpiresIn
+        val expiresInMillis: Long = JwtConfig.accessTokenExpiresIn.seconds // com.aethink.extensions.seconds
         return JWT.create()
             .withAudience(JwtConfig.audience)
             .withIssuer(JwtConfig.issuer)
