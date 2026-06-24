@@ -1,6 +1,8 @@
 package com.aethink.routes
 
+import com.aethink.data.RefreshTokenRepositoryInMemory
 import com.aethink.data.UserRepositoryInMemory
+import com.aethink.domain.RefreshToken
 import com.aethink.domain.User
 import com.aethink.dto.LoginRequest
 import com.aethink.dto.LoginResponse
@@ -19,6 +21,8 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
+import java.util.UUID
+import kotlin.time.Clock
 
 fun Route.authRoutes() {
     route("/auth") {
@@ -114,14 +118,31 @@ fun Route.authRoutes() {
             /**
              * If login success
              */
+            // Access token
             val accessToken = TokenService.createAccessToken(email)
             val expiresIn = JwtConfig.accessTokenExpiresIn // seconds
+            // Refresh token
+            val rawRefreshToken = TokenService.generateRefreshToken()
+            val refreshTokenHash = TokenService.hashRefreshToken(rawRefreshToken)
+            val refreshToken = RefreshToken(
+                UUID.randomUUID().toString(),
+                existingUser.email,
+                refreshTokenHash,
+                Clock.System.now(),
+                TokenService.getRefreshTokenExpirationInstant(),
+                null,
+                null
+            )
 
+            // Save refresh token
+            RefreshTokenRepositoryInMemory.saveRefreshToken(refreshToken)
+
+            // Respond both acces and refresh token
             val loginResponse = LoginResponse(
                 accessToken,
                 "Bearer",
                 expiresIn,
-                "TODO"
+                rawRefreshToken
             )
 
             call.respond(
