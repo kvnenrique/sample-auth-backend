@@ -6,6 +6,7 @@ import com.aethink.domain.RefreshToken
 import com.aethink.domain.User
 import com.aethink.dto.LoginRequest
 import com.aethink.dto.LoginResponse
+import com.aethink.dto.RefreshTokenRequest
 import com.aethink.dto.RegisterRequest
 import com.aethink.dto.UserResponse
 import com.aethink.security.BCryptPasswordHasher
@@ -144,6 +145,103 @@ fun Route.authRoutes() {
                 "Bearer",
                 expiresIn,
                 rawRefreshToken
+            )
+
+            call.respond(
+                HttpStatusCode.OK,
+                loginResponse
+            )
+        }
+
+        /*
+         * POST /auth/refresh
+         * */
+        post("/refresh") {
+            val requestBody = call.receive<RefreshTokenRequest>()
+            val rawRefreshToken = requestBody.refreshToken
+
+            if (rawRefreshToken.isBlank()) {
+                call.respond(
+                    HttpStatusCode.BadRequest,
+                    "Refresh token can not be blank"
+                )
+                return@post
+            }
+
+            val refreshTokenHash = TokenService.hashRefreshToken(rawRefreshToken)
+            val existingRefreshToken = RefreshTokenRepositoryInMemory
+                .findRefreshTokenByTokenHash(refreshTokenHash)
+
+            // Check token exists
+            if (existingRefreshToken == null) {
+                call.respond(
+                    HttpStatusCode.Unauthorized,
+                    "Invalid refresh token"
+                )
+                return@post
+            }
+
+            // Check token hasn't expired
+            val now = Clock.System.now()
+            if (existingRefreshToken.expires_at <= now) {
+                call.respond(
+                    HttpStatusCode.Unauthorized,
+                    "Invalid refresh token"
+                )
+                return@post
+            }
+
+            // Check token hasn't been revoked
+            if (existingRefreshToken.revoked_at != null) {
+                call.respond(
+                    HttpStatusCode.Unauthorized,
+                    "Invalid refresh token"
+                )
+                return@post
+            }
+
+            val existingUser = UserRepositoryInMemory.findUserByEmail(
+                existingRefreshToken.user_id
+            )
+
+            if (existingUser == null) {
+                call.respond(
+                    HttpStatusCode.Unauthorized,
+                    "Invalid refresh token"
+                )
+                return@post
+            }
+
+            // Create a new access and refresh tokens
+            val newAccessToken = TokenService.createAccessToken(existingUser.email)
+
+            val newRefreshTokenCreatedAt = Clock.System.now()
+            val newRawRefreshToken = TokenService.generateRefreshToken()
+            val newRefreshTokenHash = TokenService.hashRefreshToken(newRawRefreshToken)
+
+            val newRefreshToken = RefreshToken(
+                UUID.randomUUID().toString(),
+                existingUser.email,
+                newRefreshTokenHash,
+                newRefreshTokenCreatedAt,
+                TokenService.getRefreshTokenExpirationInstant(newRefreshTokenCreatedAt),
+                null,
+                null
+            )
+
+            // Save new refresh token and revoke old one
+            RefreshTokenRepositoryInMemory.saveRefreshToken(newRefreshToken)
+
+            RefreshTokenRepositoryInMemory.revokeRefreshTokenById(
+                existingRefreshToken.id,
+                newRefreshToken.id
+            )
+
+            val loginResponse = LoginResponse(
+                newAccessToken,
+                "Bearer",
+                JwtConfig.accessTokenExpiresIn,
+                newRawRefreshToken
             )
 
             call.respond(
