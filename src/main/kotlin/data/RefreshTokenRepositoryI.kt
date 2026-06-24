@@ -7,5 +7,5 @@ interface RefreshTokenRepositoryI {
     fun findRefreshTokensByUserId(userId: String): List<RefreshToken> // real auth systems require multiple sessions
     fun saveRefreshToken(refreshToken: RefreshToken)
     fun updateRefreshToken(refreshToken: RefreshToken)
-    fun revokeRefreshTokenById(id: String)
+    fun revokeRefreshTokenById(id: String, replacedByTokenId: String? = null)
 }

@@ -22,11 +22,12 @@ object RefreshTokenRepositoryInMemory: RefreshTokenRepositoryI {
         this.refreshTokenTable[refreshToken.id] = refreshToken
     }
 
-    override fun revokeRefreshTokenById(id: String) {
+    override fun revokeRefreshTokenById(id: String, replacedByTokenId: String?) {
         val refreshToken = refreshTokenTable[id] ?: return
 
         this.refreshTokenTable[id] = refreshToken.copy(
-            revoked_at = Clock.System.now()
+            revoked_at = Clock.System.now(),
+            replaced_by_token_id = replacedByTokenId
         )
     }
 }
