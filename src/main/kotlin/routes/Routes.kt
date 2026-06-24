@@ -6,11 +6,9 @@ import com.aethink.dto.LoginRequest
 import com.aethink.dto.LoginResponse
 import com.aethink.dto.RegisterRequest
 import com.aethink.dto.UserResponse
-import com.aethink.extensions.seconds
 import com.aethink.security.BCryptPasswordHasher
 import com.aethink.security.JwtConfig
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
+import com.aethink.security.TokenService
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.jwt.JWTPrincipal
@@ -21,7 +19,6 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
-import java.util.Date
 
 fun Route.authRoutes() {
     route("/auth") {
@@ -117,25 +114,18 @@ fun Route.authRoutes() {
             /**
              * If login success
              */
+            val accessToken = TokenService.createAccessToken(email)
             val expiresIn = JwtConfig.accessTokenExpiresIn // seconds
 
-            val accessToken = JWT.create()
-                .withAudience(JwtConfig.audience)
-                .withIssuer(JwtConfig.issuer)
-                .withClaim(JwtConfig.emailClaim, existingUser.email)
-                .withExpiresAt(Date(System.currentTimeMillis() + expiresIn.seconds))
-                .sign(Algorithm.HMAC256(JwtConfig.secret))
-
-            val response = LoginResponse(
+            val loginResponse = LoginResponse(
                 accessToken,
                 "Bearer",
                 expiresIn
             )
 
-
             call.respond(
                 HttpStatusCode.OK,
-                response
+                loginResponse
             )
         }
     }
